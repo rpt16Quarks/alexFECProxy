@@ -32,6 +32,15 @@ app.get("/reviews", (req, res) => {
   })
 })
 
+app.get("/images", (req, res) => {
+  let id = req.query.id;
+  request(`http://localhost:3003/images?id=${id}`, (err, resp, body) => {
+    if (!err && resp.statusCode === 200) {
+      res.status(200).send(body);
+    }
+  })
+})
+
 
 
 
