@@ -6,15 +6,29 @@ let bodyParser = require('body-parser');
 
 let app = express();
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 
-let alexRoute = path.resolve("../alexFEC/client/dist");
-app.use(express.static(alexRoute));
 
-app.get("/data", (req, res) => {
-  request("http://localhost:3001/data", (err, resp, body) => {
-    let bod = JSON.parse(body);
-    res.send(bod).status(200);
+//let alexRoute = path.resolve("../alexFEC/client/dist");
+let p = path.resolve("client", "dist");
+app.use(express.static(p));
+
+app.get('/suggested', (req, res) => {
+  let id = req.query.prod_id;
+  request("http://localhost:3001/suggested?prod_id="+id, (err, resp, body) =>{
+    if (!err && resp.statusCode === 200) {
+      res.status(200).send(body);
+    }
+  })
+})
+
+
+app.get("/reviews", (req, res) => {
+  let id = req.query.prod_id;
+  request(`http://localhost:3004/reviews?prod_id=${id}`, (err, resp, body) => {
+    if (!err && resp.statusCode === 200){
+      res.status(200).send(body);
+    }
   })
 })
 
