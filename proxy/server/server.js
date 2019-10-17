@@ -16,18 +16,18 @@ app.use(express.static(p));
 app.get('/suggested', (req, res) => {
   let id = req.query.prod_id;
   request("http://localhost:3001/suggested?prod_id="+id, (err, resp, body) =>{
-    if (!err && resp.statusCode === 200) {
-      res.status(200).send(body);
+    if (!err && resp.statusCode == 200) {
+      //Doesn't like when I set status Code - Error: Can't set headers after they are sent.
+      res.send(body)
     }
   })
 })
-
 
 app.get("/reviews", (req, res) => {
   let id = req.query.prod_id;
   request(`http://localhost:3004/reviews?prod_id=${id}`, (err, resp, body) => {
     if (!err && resp.statusCode === 200){
-      res.status(200).send(body);
+      res.send(body);
     }
   })
 })
@@ -36,12 +36,20 @@ app.get("/images", (req, res) => {
   let id = req.query.id;
   request(`http://localhost:3003/images?id=${id}`, (err, resp, body) => {
     if (!err && resp.statusCode === 200) {
-      res.status(200).send(body);
+      res.send(body);
     }
   })
 })
 
-
+app.get("/description", (req, res) => {
+  let id = req.query.prod_id;
+  console.log("description id: ", id);
+  request(`http://localhost:3005/description/?prod_id=${id}`, (err, resp, body) => {
+    if (!err && resp.statusCode === 200){
+      res.send(body);
+    }
+  })
+})
 
 
 
